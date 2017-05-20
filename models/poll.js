@@ -10,6 +10,12 @@ const pollSchema = mongoose.Schema({
         ref: 'User',
         required: [true, 'user_id is a required field']
     },
+    username: {
+        type: String,
+        minlength: [8, 'username must be at least 8 characters long'],
+        maxlength: [25, 'username must be less than 25 characters long'],
+        match: /^[a-zA-Z0-9]+$/
+    },
     title: {
         type: String,
         required: [true, 'title is a required field'],
@@ -21,8 +27,7 @@ const pollSchema = mongoose.Schema({
         option: {
             type: String,
             required: [true, 'option is a required field'],
-            maxlength: [25, 'option must be 25 characters or less'],
-            unique: true
+            maxlength: [25, 'option must be 25 characters or less']
         },
         votes: {
             type: Number,
@@ -75,20 +80,28 @@ module.exports.incrementVote = function(poll_id, option_id, voter_id, voter_ip, 
 
 module.exports.addOption = function(poll_id, option, callback) {
     // add the option and set votes to 1 for it
-    const options = {
+    const myOptions = {
         runValidators: true
     }
-    Poll.findByIdAndUpdate(poll_id, { $push: { options: option } }, options, callback);
+    Poll.findOneAndUpdate(
+        { _id: poll_id},
+        { $push: { options: option } },
+        myOptions,
+        callback
+    );
 }
 
-module.exports.removeOption = function(poll_id, option_id, callback) {
-    Poll.update( 
-        { '_id': poll_id },
-        { $pull: { 'options.option_id': option_id } },
+module.exports.removeOption = function(poll_id, option, callback) {
+    Poll.findOneAndUpdate( 
+        { _id: poll_id },
+        { $pull: { options: option } },
         callback
     );
 }
 
 module.exports.addPoll = function(newPoll, callback) {
-    newPoll.save(callback);
+    const options = {
+        runValidators: true
+    }
+    newPoll.save(options, callback);
 }
