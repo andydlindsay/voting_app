@@ -38,10 +38,6 @@ const pollSchema = mongoose.Schema({
         ip: {
             type: String,
             match: /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
-        },
-        user_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
         }
     }],
     ts: {
@@ -57,22 +53,24 @@ module.exports.getPollById = function(id, callback) {
     Poll.findById(id, callback);
 };
 
-module.exports.incrementVote = function(poll_id, option_id, voter_id, voter_ip, callback) {
+module.exports.removePoll = function(id, callback) {
+    // delete the poll
+    Poll.findByIdAndRemove(id, callback);
+};
+
+module.exports.incrementVote = function(poll_id, option_id, voter_ip, callback) {
     // update the vote count for the option selected
     const voterObj = {
-        ip: voter_ip || '',
-        id: voter_id || ''
+        ip: voter_ip
     }    
-    Poll.findByIdAndUpdate(
+    Poll.findOneAndUpdate(
         {
             '_id': poll_id,
             'options._id': option_id
         },
         { 
-            $set: { 
-                $inc: { 'options.$.votes': 1  },
-                $push: { 'voters': voterObj }
-            }
+            $inc: { 'options.$.votes': 1  },
+            $push: { voters: voterObj }
         },
         callback
     );
@@ -104,4 +102,11 @@ module.exports.addPoll = function(newPoll, callback) {
         runValidators: true
     }
     newPoll.save(options, callback);
+}
+
+module.exports.hasAlreadyVoted = function(poll_id, voter_ip, callback) {
+    Poll.findOne({ 
+        _id: poll_id,
+        'voters.ip': voter_ip
+    }, callback);
 }

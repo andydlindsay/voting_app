@@ -28,8 +28,7 @@ describe('Poll Schema', () => {
                 ],
                 'voters': [
                     {
-                        'ip': '192.95.20.138',
-                        'user_id': new mongoose.Types.ObjectId
+                        'ip': '192.95.20.138'
                     }
                 ]
             });
@@ -152,17 +151,6 @@ describe('Poll Schema', () => {
 
                 it('should accept a valid value', (done) => {
                     newPoll.voters[0].ip = '192.95.20.138';
-                    let error = newPoll.validateSync();
-                    assert.equal(error, undefined);
-                    done();
-                });
-
-            });
-
-            describe('user_id:', () => {
-
-                it('should accept a valid value', (done) => {
-                    newPoll.voters[0].user_id = new mongoose.Types.ObjectId;
                     let error = newPoll.validateSync();
                     assert.equal(error, undefined);
                     done();

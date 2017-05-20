@@ -14,7 +14,7 @@ router.get('/:id', (req, res) => {
         if (poll) {
             res.json({ sucess: true, poll });
         } else {
-            res.json({ success: false, msg: 'poll not found' });
+            res.json({ success: false, msg: 'Poll not found' });
         }
     });
 });
@@ -55,13 +55,48 @@ router.put('/:id/removeoption', passport.authenticate('jwt', {session: false}), 
     const poll_id = req.params.id;
     const option = req.body.option;
     Poll.removeOption(poll_id, option, (err, doc) => {
-        console.log('doc:', doc);
         if (err) {
             res.json({ success: false, msg: 'Failed to remove option', errmsg: err.message });
         } else if (doc) {
             res.json({ success: true, msg: 'Option removed' });
         } else {
             res.json({ success: false, msg: 'Failed to remove option' });
+        }
+    });
+});
+
+// remove a poll from the database
+router.delete('/:id', passport.authenticate('jwt', {session: false}), (req, res) => {
+    const poll_id = req.params.id;
+    Poll.removePoll(poll_id, (err, doc) => {
+        if (err) {
+            res.json({ success: false, msg: 'Failed to delete poll', errmsg: err.message });
+        } else {
+            res.json({ success: true, msg: 'Poll deleted' });
+        }
+    });
+});
+
+// increment the number of votes and log voter ip
+router.put('/:id/vote', (req, res) => {
+    const poll_id = req.params.id;
+    const option_id = req.body.option_id;
+    const voter_ip = req.body.voter_ip;
+    Poll.hasAlreadyVoted(poll_id, voter_ip, (err, doc) => {
+        if (err) {
+            res.json({ success: false, msg: 'An error has occurred', errmsg: err.message });
+        } else if (doc) {
+            res.json({ success: false, msg: 'IP has already voted for this poll' });
+        } else {
+            Poll.incrementVote(poll_id, option_id, voter_ip, (err, doc) => {
+                if (err) {
+                    res.json({ success: false, msg: 'Failed to record vote', errmsg: err.message });
+                } else if (doc) {
+                    res.json({ success: true, msg: 'Vote recorded' });
+                } else {
+                    res.json({ success: false, msg: 'Did not record vote' });
+                }
+            });
         }
     });
 });

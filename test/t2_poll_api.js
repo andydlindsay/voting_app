@@ -50,10 +50,16 @@ describe('Poll API', () => {
 
     });
 
-    describe('increments votes and records voter ip/id', () => {
+    describe('increments votes and records voter ip', () => {
 
 
         
+    });
+
+    describe('deletes a poll from the collection', () => {
+        
+
+
     });
 
 });
