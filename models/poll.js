@@ -50,13 +50,16 @@ const pollSchema = mongoose.Schema({
 const Poll = module.exports = mongoose.model("Poll", pollSchema, "polls");
 
 module.exports.getPollById = function(id, callback) {
-    Poll.findById(id, callback);
+    Poll.findById(id, { username: 1, title: 1, options: 1, ts: 1 }, callback);
 };
 
 module.exports.removePoll = function(id, callback) {
-    // delete the poll
     Poll.findByIdAndRemove(id, callback);
 };
+
+module.exports.getPolls = function(callback) {
+    Poll.find({}, { username: 1, title: 1, options: 1, ts: 1 }, callback);
+}
 
 module.exports.incrementVote = function(poll_id, option_id, voter_ip, callback) {
     // update the vote count for the option selected
@@ -77,7 +80,6 @@ module.exports.incrementVote = function(poll_id, option_id, voter_ip, callback) 
 }
 
 module.exports.addOption = function(poll_id, option, callback) {
-    // add the option and set votes to 1 for it
     const myOptions = {
         runValidators: true
     }

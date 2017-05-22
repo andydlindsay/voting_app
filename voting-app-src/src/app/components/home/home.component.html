@@ -1,6 +1,11 @@
 <md-card>
-  <md-toolbar>Welcome to Voteplex</md-toolbar>
+  <md-toolbar>Select a poll below to cast your vote!</md-toolbar>
   <md-card-content>
-      <h2>Would you like to create a poll?</h2>
+      <md-list *ngIf="polls">
+        <md-list-item *ngFor="let poll of polls">
+          <a routerLink="{{'/poll/' + poll._id}}"><h3 md-line>{{ poll.title }}</h3></a>
+        </md-list-item>
+      </md-list>
+      <h2 *ngIf="!isLoggedIn()"><a routerLink="/register">Register</a> now to create a new poll!</h2>
   </md-card-content>
 </md-card>

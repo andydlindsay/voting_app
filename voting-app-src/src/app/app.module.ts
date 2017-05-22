@@ -11,6 +11,7 @@ import 'hammerjs';
 
 import { D3Service } from 'd3-ng2-service';
 import { AuthService } from './services/auth.service';
+import { PollService } from './services/poll.service';
 import { UservalidateService } from './services/uservalidate.service';
 import { AuthGuard } from './guards/auth.guard';
 
@@ -20,12 +21,14 @@ import { HomeComponent } from './components/home/home.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { PollComponent } from './components/poll/poll.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'register', component: RegisterComponent},
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: 'poll/:id', component: PollComponent},
   { path: '**', redirectTo: '/' }
 ]
 
@@ -36,7 +39,8 @@ const appRoutes: Routes = [
     HomeComponent,
     RegisterComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    PollComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +58,8 @@ const appRoutes: Routes = [
     D3Service,
     AuthService,
     UservalidateService,
-    AuthGuard
+    AuthGuard,
+    PollService
   ],
   bootstrap: [
     AppComponent

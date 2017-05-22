@@ -1,0 +1,22 @@
+<md-card *ngIf="poll">
+  <md-toolbar>
+    <span class="app-toolbar-filler"></span>
+      {{ poll.title }}
+    <span class="app-toolbar-filler"></span>
+  </md-toolbar>
+  <md-card-content>
+    <div class="flex-container">
+      <div id="poll-area">
+        <md-list>
+          <md-list-item *ngFor="let option of poll.options">
+            <button color="primary" md-button>{{ option.option }}</button>
+          </md-list-item>
+        </md-list>
+        <form>
+          
+        </form>
+      </div>
+      <div id="graph-area"></div>
+    </div>
+  </md-card-content>
+</md-card>

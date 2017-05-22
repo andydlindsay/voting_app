@@ -19,6 +19,17 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// retrieve all polls
+router.get('/', (req, res) => {
+    Poll.getPolls((err, docs) => {
+        if (err) {
+            return res.json({ success: false, msg: err.message });
+        } else {
+            res.json({ success: true, polls: docs });
+        }
+    });
+});
+
 // add a poll to the database
 router.post('/new', passport.authenticate('jwt', {session: false}), (req, res) => {
     const newPoll = new Poll({
@@ -27,11 +38,13 @@ router.post('/new', passport.authenticate('jwt', {session: false}), (req, res) =
         title: req.body.title,
         options: req.body.options
     });
-    Poll.addPoll(newPoll, (err) => {
+    Poll.addPoll(newPoll, (err, doc) => {
         if (err) {
             res.json({ success: false, msg: 'Failed to create poll', errmsg: err.message });
-        } else {
+        } else if (doc) {
             res.json({ success: true, msg: 'Poll created' });
+        } else {
+            res.json({ success: false, mag: 'Failed to create poll' });
         }
     });
 });

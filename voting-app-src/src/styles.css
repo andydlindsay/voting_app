@@ -105,3 +105,14 @@ md-sidenav-container {
 }
 
 /* id's */
+#poll-area {
+    flex: 1;
+}
+
+#graph-area {
+    flex: 1;
+}
+
+#poll-area button {
+    width: 100%;
+}
