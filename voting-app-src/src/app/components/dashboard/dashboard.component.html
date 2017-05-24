@@ -1,15 +1,19 @@
 <md-card>
   <div *ngIf="user">
-    <md-toolbar>Dashboard - {{ user.name }}</md-toolbar>
+    <md-toolbar>Dashboard for {{ user.name }}</md-toolbar>
     <md-card-content *ngIf="polls">
-      <md-list *ngIf="polls.length > 0">
-        <md-list-item *ngFor="let poll of polls">
-          <a routerLink="{{ '/poll/' + poll._id }}">
-            <h3>{{ poll.title }}</h3>
-          </a>
-        </md-list-item>
-      </md-list>
-      <h2 *ngIf="polls.length == 0">You haven't created any polls yet. Create a poll now!</h2>
+      <div *ngIf="polls.length > 0">
+        <h2 class="no-bottom-margin">Polls you have created:</h2>
+        <md-list>
+          <md-list-item *ngFor="let poll of polls">
+            <a routerLink="{{ '/poll/' + poll._id }}">
+              <h3>{{ poll.title }}</h3>
+            </a>
+          </md-list-item>
+        </md-list>
+        <h2>Create a <a routerLink="/poll/new">new poll!</a></h2>
+      </div>
+      <h2 *ngIf="polls.length == 0">You haven't created any polls yet. <a routerLink="/poll/new">Create a poll</a> now!</h2>
     </md-card-content>
   </div>
 </md-card>

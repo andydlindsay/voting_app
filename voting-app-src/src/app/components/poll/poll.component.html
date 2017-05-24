@@ -9,7 +9,7 @@
       <div id="poll-area">
 
         <md-list>
-          <h3 class="left-padding">I choose...</h3>
+          <h3 class="left-padding">Choose...</h3>
           <md-list-item *ngFor="let option of poll.options">
             <button (click)="onVoteClick(option._id)" color="primary" md-raised-button>{{ option.option }}</button>
           </md-list-item>
@@ -19,8 +19,13 @@
           <h3>Don't like these choices? Add a new one!</h3>
           <md-input-container>
           <input type="text" required mdInput placeholder="New choice!" formControlName="newOption" id="newOption">
+          <md-hint *ngIf="formErrors.newOption">{{ formErrors.newOption }}</md-hint>
           </md-input-container>
-          <button md-raised-button (click)="onAddClick()" color="accent">Add</button>
+          <button type="button" md-raised-button (click)="onAddClick()" color="accent">Add</button> 
+        </form>
+
+        <form *ngIf="isUserOwnedPoll()">
+          <button (click)="onDeleteClick()" md-raised-button color="warn">Delete this poll</button>
         </form>
 
       </div>

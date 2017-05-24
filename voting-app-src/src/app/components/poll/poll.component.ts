@@ -32,8 +32,14 @@ export class PollComponent implements OnInit {
 
   poll: any;
   optionForm: FormGroup;
+  data: any;
+  myChart: any;
 
   ngOnInit() {
+    this.getData();
+  }
+
+  getData() {
     this.route.params
       .subscribe(params => {
         const poll_id = params['id'];
@@ -98,6 +104,37 @@ export class PollComponent implements OnInit {
     return this.authService.loggedIn();
   }
 
+  isUserOwnedPoll() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user !== null) {
+      if (user.id == this.poll['user_id']) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  onDeleteClick() {
+    this.pollService.deletePoll(this.poll['_id'])
+      .subscribe(
+        data => {
+          if (data.success) {
+            this.flashMessage.show('Poll deleted', { cssClass: 'alert-success' });
+            this.router.navigate(['/']);
+          } else { 
+            this.flashMessage.show('Poll was not deleted', { cssClass: 'alert-failure' });
+          }
+        },
+        err => {
+          console.log(err);
+          return false;
+        }
+      );
+  }
+
   onVoteClick(option_id) {
     console.log('clicked ' + option_id);
     this.jsonp.get('//api.ipify.org/?format=jsonp&callback=JSONP_CALLBACK').subscribe(res => {
@@ -106,11 +143,13 @@ export class PollComponent implements OnInit {
       .subscribe(
         data => {
           if (data.success) {
-            this.flashMessage.show('Vote recorded!', { cssClass: 'alert-success' });
-            this.router.navigate(['/poll/' + this.poll['_id']]);
-            location.reload();
+            this.flashMessage.show('Thanks for voting!', { cssClass: 'alert-success' });
+            this.destroyDonut();
+            this.getData();
+          } else if (data.msg == 'IP has already voted for this poll') {
+            this.flashMessage.show('You have already voted on this poll.', { cssClass: 'alert-failure' });
           } else {
-            this.flashMessage.show(data.msg, { cssClass: 'alert-failure' });
+            this.flashMessage.show(data.errmsg, { cssClass: 'alert-failure' });
           }
         },
         err => {
@@ -130,8 +169,7 @@ export class PollComponent implements OnInit {
       this.pollService.addOption(this.poll['_id'], newOption).subscribe(
         data => {
           if (data.success) {
-            this.flashMessage.show('Option added!', { cssClass: 'alert-success' });
-            location.reload();
+            this.getData();            
           } else {
             console.log('error:', data);
             this.flashMessage.show(data.msg, { cssClass: 'alert-failure' });
@@ -143,6 +181,16 @@ export class PollComponent implements OnInit {
         }
       );
     }
+  }
+
+  // fix for chart.js glitch where old chart data is displayed on hover
+  destroyDonut() {
+    let oldCanvas = document.getElementById('graph');
+    const graphArea = document.getElementById('grapharea');
+    graphArea.removeChild(oldCanvas);
+    const newCanvas = document.createElement('canvas');
+    newCanvas.id = 'graph';
+    graphArea.appendChild(newCanvas);
   }
 
   drawDonut() {
@@ -157,36 +205,57 @@ export class PollComponent implements OnInit {
       labelArray.push(this.poll.options[i].option);
       voteArray.push(this.poll.options[i].votes);
     }
+    const backgroundColorArray = [
+      'rgba(255, 153, 0, 0.2)',
+      'rgba(74, 111, 227, 0.2)',
+      'rgba(181, 187, 227, 0.2)',
+      'rgba(230, 175, 185, 0.2)',
+      'rgba(211, 63, 106, 0.2)',
+      'rgba(17, 198, 56, 0.2)',
+      'rgba(141, 213, 147, 0.2)',
+      'rgba(198, 222, 199, 0.2)',
+      'rgba(2, 63, 165, 0.2)',
+      'rgba(125, 135, 185, 0.2)',
+      'rgba(190, 193, 212, 0.2)',
+      'rgba(214, 188, 192, 0.2)',
+      'rgba(187, 119, 132, 0.2)',
+      'rgba(142, 6, 59, 0.2)'
+    ];
+    const borderColorArray = [
+      'rgba(255, 153, 0, 1)',
+      'rgba(74, 111, 227, 1)',
+      'rgba(181, 187, 227, 1)',
+      'rgba(230, 175, 185, 1)',
+      'rgba(211, 63, 106, 1)',
+      'rgba(17, 198, 56, 1)',
+      'rgba(141, 213, 147, 1)',
+      'rgba(198, 222, 199, 1)',
+      'rgba(2, 63, 165, 1)',
+      'rgba(125, 135, 185, 1)',
+      'rgba(190, 193, 212, 1)',
+      'rgba(214, 188, 192, 1)',
+      'rgba(187, 119, 132, 1)',
+      'rgba(142, 6, 59, 1)'
+    ];
 
     // based on chart.js documentation
     // http://www.chartjs.org/docs/#chart-configuration-chart-data
-    const myChart = new Chart(ctx, {
+    this.myChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: labelArray,
         datasets: [{
           data: voteArray,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
+          backgroundColor: backgroundColorArray,
+          borderColor: borderColorArray,
           borderWidth: 2
         }]
       },
       options: {
         maintainAspectRatio: false,
+        tooltips: {
+          displayColors: false
+        },
         legend: {
           display: true
         },

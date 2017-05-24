@@ -50,7 +50,7 @@ const pollSchema = mongoose.Schema({
 const Poll = module.exports = mongoose.model("Poll", pollSchema, "polls");
 
 module.exports.getPollById = function(id, callback) {
-    Poll.findById(id, { username: 1, title: 1, options: 1, ts: 1 }, callback);
+    Poll.findById(id, { username: 1, title: 1, options: 1, ts: 1, user_id: 1 }, callback);
 };
 
 module.exports.getPollsByUser = function(user_id, callback) {

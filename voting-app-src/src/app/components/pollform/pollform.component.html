@@ -1,0 +1,16 @@
+<md-card>
+  <md-toolbar>New Poll</md-toolbar>
+  <md-card-content>
+    <form [formGroup]="pollForm">
+      <md-input-container>
+        <input type="text" required mdInput placeholder="Poll title" formControlName="pollTitle" id="pollTitle">
+        <md-hint *ngIf="formErrors.pollTitle">{{ formErrors.pollTitle }}</md-hint>
+      </md-input-container>
+      <md-input-container>
+        <input type="text" required mdInput placeholder="Choices separated by commas" formControlName="pollOptions" id="pollOptions">
+        <md-hint *ngIf="formErrors.pollOptions">{{ formErrors.pollOptions }}</md-hint>
+      </md-input-container>
+      <button type="button" md-raised-button (click)="onCreateClick()" color="accent">Create poll</button>
+    </form>
+  </md-card-content>
+</md-card>

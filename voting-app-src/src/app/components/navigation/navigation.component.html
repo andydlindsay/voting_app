@@ -21,6 +21,7 @@
       </md-nav-list>
       <md-nav-list *ngIf="isLoggedIn()">
         <a md-list-item routerLink="/dashboard" (click)="start.close()">Dashboard</a>
+        <a md-list-item routerLink="/poll/new" (click)="start.close()">New Poll</a>
       </md-nav-list>
       <hr *ngIf="isLoggedIn()">
       <button md-button *ngIf="isLoggedIn()" (click)="start.close(); onLogoutClick()" class="nav-list-button">LOGOUT</button>

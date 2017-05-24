@@ -11,12 +11,24 @@ export class PollService {
     private http: Http
   ) {  }
 
-  createPoll(poll) {
+  createPoll(title, options) {
     this.loadToken();
     let headers = new Headers();
     headers.append('Authorization', this.authToken);
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:8080/api/polls/new', { headers })
+    const optionsArray = options.split(',');
+    let optionsObjectArray = [];
+    for (let i = 0; i < optionsArray.length; i++) {
+      optionsObjectArray.push({
+        'option': optionsArray[i].trim()
+      })
+    }
+    const newPoll = {
+      'title': title,
+      'options': optionsObjectArray
+    }
+    console.log('newPoll:', newPoll);
+    return this.http.post('http://localhost:8080/api/polls/new', newPoll, { headers })
       .map(res => res.json());
   }
 
@@ -67,6 +79,15 @@ export class PollService {
       'option': option
     }
     return this.http.put('http://localhost:8080/api/polls/' + poll_id + '/addoption', newOption, { headers })
+      .map(res => res.json());
+  }
+
+  deletePoll(poll_id) {
+    this.loadToken();
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.authToken);
+    return this.http.delete('http://localhost:8080/api/polls/' + poll_id, { headers })
       .map(res => res.json());
   }
 

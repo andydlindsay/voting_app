@@ -26,6 +26,10 @@ md-sidenav-container {
     min-height: 92vh;
 }
 
+/*md-list button {
+    border: 1px solid purple !important;
+}*/
+
 /* classes */
 .title-bar {
     font-weight: normal;
@@ -113,6 +117,10 @@ md-sidenav-container {
     padding-left: 20px;
 }
 
+.no-bottom-margin {
+    margin-bottom: 0px;
+}
+
 /* id's */
 #poll-area {
     flex: 1;
@@ -120,7 +128,7 @@ md-sidenav-container {
 
 #grapharea {
     flex: 1;
-    /*height: 60vh;*/
+    min-height: 40vh;
 }
 
 #poll-area button {
