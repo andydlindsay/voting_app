@@ -1,22 +1,32 @@
 <md-card *ngIf="poll">
   <md-toolbar>
-    <span class="app-toolbar-filler"></span>
-      {{ poll.title }}
+    <!--<span class="app-toolbar-filler"></span>-->
+      <h1>{{ poll.title }}</h1>
     <span class="app-toolbar-filler"></span>
   </md-toolbar>
   <md-card-content>
     <div class="flex-container">
       <div id="poll-area">
+
         <md-list>
+          <h3 class="left-padding">I choose...</h3>
           <md-list-item *ngFor="let option of poll.options">
-            <button color="primary" md-button>{{ option.option }}</button>
+            <button (click)="onVoteClick(option._id)" color="primary" md-raised-button>{{ option.option }}</button>
           </md-list-item>
         </md-list>
-        <form>
-          
+
+        <form *ngIf="isLoggedIn()" [formGroup]="optionForm">
+          <h3>Don't like these choices? Add a new one!</h3>
+          <md-input-container>
+          <input type="text" required mdInput placeholder="New choice!" formControlName="newOption" id="newOption">
+          </md-input-container>
+          <button md-raised-button (click)="onAddClick()" color="accent">Add</button>
         </form>
+
       </div>
-      <div id="graph-area"></div>
+      <div id="grapharea">
+        <canvas id="graph"></canvas>
+      </div>
     </div>
   </md-card-content>
 </md-card>

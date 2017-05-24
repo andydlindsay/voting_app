@@ -1,7 +1,7 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, JsonpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@angular/material';
@@ -10,6 +10,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import 'hammerjs';
 
 import { D3Service } from 'd3-ng2-service';
+import { ChartsModule } from 'ng2-charts';
 import { AuthService } from './services/auth.service';
 import { PollService } from './services/poll.service';
 import { UservalidateService } from './services/uservalidate.service';
@@ -51,7 +52,9 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     MaterialModule,
     FlashMessagesModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ChartsModule,
+    JsonpModule
   ],
   providers: [
     Title,

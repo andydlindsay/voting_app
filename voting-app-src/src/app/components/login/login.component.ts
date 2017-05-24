@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
   onLoginSubmit() {
     // submit login info to database
     if (this.loginForm.valid) {
-      console.log('GTG');
+      // console.log('GTG');
       const user = this.loginForm.value;
 
       this.auth.authenticateUser(user).subscribe(data => {

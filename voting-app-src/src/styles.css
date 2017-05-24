@@ -10,6 +10,7 @@ body {
 md-card-content {
     margin: auto;
     padding: 16px;
+    padding-bottom: 0px;
 }
 
 form {
@@ -104,13 +105,22 @@ md-sidenav-container {
     border:1px solid green;
 }
 
+.poll-button {
+    border: 1px solid #9C27B0 !important;
+}
+
+.left-padding {
+    padding-left: 20px;
+}
+
 /* id's */
 #poll-area {
     flex: 1;
 }
 
-#graph-area {
+#grapharea {
     flex: 1;
+    /*height: 60vh;*/
 }
 
 #poll-area button {

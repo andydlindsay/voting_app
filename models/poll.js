@@ -53,6 +53,10 @@ module.exports.getPollById = function(id, callback) {
     Poll.findById(id, { username: 1, title: 1, options: 1, ts: 1 }, callback);
 };
 
+module.exports.getPollsByUser = function(user_id, callback) {
+    Poll.find({ user_id: user_id }, { title: 1 }, callback);
+}
+
 module.exports.removePoll = function(id, callback) {
     Poll.findByIdAndRemove(id, callback);
 };

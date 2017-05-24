@@ -1,7 +1,15 @@
 <md-card>
   <div *ngIf="user">
     <md-toolbar>Dashboard - {{ user.name }}</md-toolbar>
-    <md-card-content>
+    <md-card-content *ngIf="polls">
+      <md-list *ngIf="polls.length > 0">
+        <md-list-item *ngFor="let poll of polls">
+          <a routerLink="{{ '/poll/' + poll._id }}">
+            <h3>{{ poll.title }}</h3>
+          </a>
+        </md-list-item>
+      </md-list>
+      <h2 *ngIf="polls.length == 0">You haven't created any polls yet. Create a poll now!</h2>
     </md-card-content>
   </div>
 </md-card>

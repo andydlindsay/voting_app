@@ -19,6 +19,20 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// retriev polls for a specific user
+router.get('/user/:id', (req, res) => {
+    Poll.getPollsByUser(req.params.id, (err, polls) => {
+        if (err) {
+            return res.json({ success: false, msg: err.message });
+        }
+        if (polls) {
+            res.json({ success: true, polls });
+        } else {
+            res.json({ success: false, msg: 'No polls found for user' });
+        }
+    });
+});
+
 // retrieve all polls
 router.get('/', (req, res) => {
     Poll.getPolls((err, docs) => {
