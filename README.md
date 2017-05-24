@@ -11,6 +11,6 @@
 - [X] As an unauthenticated or authenticated user, I can see the results of polls in chart form. (This could be implemented using Chart.js or Google Charts.)
 - [X] As an authenticated user, if I don't like the options on a poll, I can create a new option.
 
-## This project is running on [Heroku](andydlindsay-voting-app.herokuapp.com)
+## This project is running on [Heroku](https://andydlindsay-voting-app.herokuapp.com)
 
 ### FreeCodeCamp [assignment](https://www.freecodecamp.com/challenges/build-a-voting-app) and [example](https://fcc-voting-arthow4n.herokuapp.com/polls)
