@@ -28,7 +28,7 @@ export class PollService {
       'options': optionsObjectArray
     }
     console.log('newPoll:', newPoll);
-    return this.http.post('http://localhost:8080/api/polls/new', newPoll, { headers })
+    return this.http.post('/api/polls/new', newPoll, { headers })
       .map(res => res.json());
   }
 
@@ -37,21 +37,21 @@ export class PollService {
     let headers = new Headers();
     headers.append('Authorization', this.authToken);
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:8080/api/polls/user/' + user_id, { headers })
+    return this.http.get('/api/polls/user/' + user_id, { headers })
       .map(res => res.json());
   }
 
   getPolls() {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:8080/api/polls/', { headers })
+    return this.http.get('/api/polls/', { headers })
       .map(res => res.json());
   }
 
   getPoll(poll_id) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:8080/api/polls/' + poll_id, { headers })
+    return this.http.get('/api/polls/' + poll_id, { headers })
       .map(res => res.json());
   }
 
@@ -66,7 +66,7 @@ export class PollService {
       'voter_ip': user_ip,
       'option_id': option_id
     }
-    return this.http.put('http://localhost:8080/api/polls/' + poll_id + '/vote', vote, { headers })
+    return this.http.put('/api/polls/' + poll_id + '/vote', vote, { headers })
       .map(res => res.json());
   }
 
@@ -78,7 +78,7 @@ export class PollService {
     const newOption = {
       'option': option
     }
-    return this.http.put('http://localhost:8080/api/polls/' + poll_id + '/addoption', newOption, { headers })
+    return this.http.put('/api/polls/' + poll_id + '/addoption', newOption, { headers })
       .map(res => res.json());
   }
 
@@ -87,7 +87,7 @@ export class PollService {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this.authToken);
-    return this.http.delete('http://localhost:8080/api/polls/' + poll_id, { headers })
+    return this.http.delete('/api/polls/' + poll_id, { headers })
       .map(res => res.json());
   }
 
